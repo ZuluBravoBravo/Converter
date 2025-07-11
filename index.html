@@ -53,6 +53,14 @@
       color: #555;
     }
 
+    .summary {
+      background: #f8f8f8;
+      padding: 1rem;
+      font-size: 1rem;
+      border-top: 1px solid #ccc;
+      line-height: 1.6;
+    }
+
     @media (max-width: 480px) {
       body {
         padding: 0.75rem;
@@ -71,48 +79,58 @@
 
   <!-- Celsius ↔ Fahrenheit -->
   <div class="converter">
-    <h2>Celsius ↔ Fahrenheit</h2>
-    <label>Celsius:
+    <h2>🌡️ Celsius ↔ Fahrenheit</h2>
+    <label>°C (Celsius):
       <input type="number" id="celsius" oninput="convertTemp('c')">
     </label>
-    <label>Fahrenheit:
+    <label>°F (Fahrenheit):
       <input type="number" id="fahrenheit" oninput="convertTemp('f')">
     </label>
   </div>
 
   <!-- Kilometers ↔ Miles -->
   <div class="converter">
-    <h2>Kilometers ↔ Miles</h2>
-    <label>Kilometers:
+    <h2>🛣️ Kilometers ↔ Miles</h2>
+    <label>km (Kilometers):
       <input type="number" id="km" oninput="convertDistance('km')">
     </label>
-    <label>Miles:
+    <label>mi (Miles):
       <input type="number" id="mi" oninput="convertDistance('mi')">
     </label>
   </div>
 
   <!-- Centimeters ↔ Inches -->
   <div class="converter">
-    <h2>Centimeters ↔ Inches</h2>
-    <label>Centimeters:
+    <h2>📏 Centimeters ↔ Inches</h2>
+    <label>cm (Centimeters):
       <input type="number" id="cm" oninput="convertLength('cm')">
     </label>
-    <label>Inches:
+    <label>in (Inches):
       <input type="text" id="inches" oninput="convertLength('in')">
-      <small>Enter in format like "3 5/16" or just "2.75"</small>
+      <small>Enter like "3 5/16" or just "2.75"</small>
     </label>
   </div>
 
   <!-- Euros ↔ Dollars -->
   <div class="converter">
-    <h2>Euros ↔ Dollars</h2>
-    <label>Euros:
+    <h2>💱 Euros ↔ Dollars</h2>
+    <label>€ (Euros):
       <input type="number" id="eur" oninput="convertCurrency('eur')">
     </label>
-    <label>Dollars:
+    <label>$ (Dollars):
       <input type="number" id="usd" oninput="convertCurrency('usd')">
     </label>
-    <small>Using fixed exchange rate: 1 EUR = 1.09 USD</small>
+  </div>
+
+  <!-- Conversion Summary -->
+  <div class="summary">
+    <strong>📊 Conversion Summary:</strong><br>
+    1&nbsp;°C = (°C × 1.8) + 32 = °F<br>
+    1&nbsp;°F = (°F − 32) ÷ 1.8 = °C<br>
+    1&nbsp;km = 0.62&nbsp;mi<br>
+    1&nbsp;cm = 0.39&nbsp;in<br>
+    1&nbsp;in = 2.54&nbsp;cm<br>
+    €1 = $1.17 USD
   </div>
 
   <script>
@@ -188,7 +206,7 @@
     }
 
     function convertCurrency(from) {
-      const exchangeRate = 1.09; // 1 EUR = 1.09 USD
+      const exchangeRate = 1.17; // Updated rate
       const eurInput = document.getElementById("eur");
       const usdInput = document.getElementById("usd");
 
@@ -204,6 +222,16 @@
         }
       }
     }
+
+    // Auto-select input content on focus
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('focus', function () {
+        this.select();
+      });
+      input.addEventListener('mouseup', function (e) {
+        e.preventDefault(); // prevents deselection on iOS
+      });
+    });
   </script>
 </body>
 </html>
