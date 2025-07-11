@@ -103,6 +103,18 @@
     </label>
   </div>
 
+  <!-- Euros ↔ Dollars -->
+  <div class="converter">
+    <h2>Euros ↔ Dollars</h2>
+    <label>Euros:
+      <input type="number" id="eur" oninput="convertCurrency('eur')">
+    </label>
+    <label>Dollars:
+      <input type="number" id="usd" oninput="convertCurrency('usd')">
+    </label>
+    <small>Using fixed exchange rate: 1 EUR = 1.09 USD</small>
+  </div>
+
   <script>
     function convertTemp(from) {
       let c = parseFloat(document.getElementById('celsius').value);
@@ -173,6 +185,24 @@
       if (numerator === 0) return "";
       if (numerator === denominator) return "1";
       return `${numerator}/${denominator}`;
+    }
+
+    function convertCurrency(from) {
+      const exchangeRate = 1.09; // 1 EUR = 1.09 USD
+      const eurInput = document.getElementById("eur");
+      const usdInput = document.getElementById("usd");
+
+      if (from === 'eur') {
+        const eur = parseFloat(eurInput.value);
+        if (!isNaN(eur)) {
+          usdInput.value = (eur * exchangeRate).toFixed(2);
+        }
+      } else if (from === 'usd') {
+        const usd = parseFloat(usdInput.value);
+        if (!isNaN(usd)) {
+          eurInput.value = (usd / exchangeRate).toFixed(2);
+        }
+      }
     }
   </script>
 </body>
