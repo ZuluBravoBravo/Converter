@@ -1,1 +1,138 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Unit Converter</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      max-width: 600px;
+      margin: auto;
+      padding: 2rem;
+    }
+    label, input {
+      display: block;
+      margin: 0.5rem 0;
+    }
+    .converter {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Unit Converter</h1>
+
+  <!-- Celsius ↔ Fahrenheit -->
+  <div class="converter">
+    <h2>Celsius ↔ Fahrenheit</h2>
+    <label>Celsius:
+      <input type="number" id="celsius" oninput="convertTemp('c')">
+    </label>
+    <label>Fahrenheit:
+      <input type="number" id="fahrenheit" oninput="convertTemp('f')">
+    </label>
+  </div>
+
+  <!-- Kilometers ↔ Miles -->
+  <div class="converter">
+    <h2>Kilometers ↔ Miles</h2>
+    <label>Kilometers:
+      <input type="number" id="km" oninput="convertDistance('km')">
+    </label>
+    <label>Miles:
+      <input type="number" id="mi" oninput="convertDistance('mi')">
+    </label>
+  </div>
+
+  <!-- Centimeters ↔ Inches -->
+  <div class="converter">
+    <h2>Centimeters ↔ Inches</h2>
+    <label>Centimeters:
+      <input type="number" id="cm" oninput="convertLength('cm')">
+    </label>
+    <label>Inches:
+      <input type="text" id="inches" oninput="convertLength('in')">
+      <small>Enter in format like "3 5/16" or just "2.75"</small>
+    </label>
+  </div>
+
+  <script>
+    function convertTemp(from) {
+      let c = parseFloat(document.getElementById('celsius').value);
+      let f = parseFloat(document.getElementById('fahrenheit').value);
+
+      if (from === 'c' && !isNaN(c)) {
+        document.getElementById('fahrenheit').value = (c * 9 / 5 + 32).toFixed(1);
+      } else if (from === 'f' && !isNaN(f)) {
+        document.getElementById('celsius').value = ((f - 32) * 5 / 9).toFixed(1);
+      }
+    }
+
+    function convertDistance(from) {
+      let km = parseFloat(document.getElementById('km').value);
+      let mi = parseFloat(document.getElementById('mi').value);
+
+      if (from === 'km' && !isNaN(km)) {
+        document.getElementById('mi').value = (km * 0.621371).toFixed(1);
+      } else if (from === 'mi' && !isNaN(mi)) {
+        document.getElementById('km').value = (mi / 0.621371).toFixed(1);
+      }
+    }
+
+    function convertLength(from) {
+      const cmInput = document.getElementById('cm');
+      const inInput = document.getElementById('inches');
+
+      if (from === 'cm') {
+        const cm = parseFloat(cmInput.value);
+        if (!isNaN(cm)) {
+          const totalInches = cm / 2.54;
+          const inches = Math.floor(totalInches);
+          const frac = totalInches - inches;
+
+          const fraction = decimalToFraction(frac, 16);
+          inInput.value = `${inches} ${fraction}`;
+        }
+      } else if (from === 'in') {
+        const inchString = inInput.value.trim();
+        const totalInches = parseInchString(inchString);
+        if (!isNaN(totalInches)) {
+          const cm = totalInches * 2.54;
+          cmInput.value = cm.toFixed(2);
+        }
+      }
+    }
+
+    function parseInchString(str) {
+      // Accepts "3 5/16", "5/8", "2.75"
+      let total = 0;
+      const parts = str.split(" ");
+      for (let part of parts) {
+        if (part.includes("/")) {
+          let [num, den] = part.split("/").map(Number);
+          if (den && !isNaN(num) && !isNaN(den)) {
+            total += num / den;
+          }
+        } else {
+          let dec = parseFloat(part);
+          if (!isNaN(dec)) {
+            total += dec;
+          }
+        }
+      }
+      return total;
+    }
+
+    function decimalToFraction(decimal, denominator = 16) {
+      const numerator = Math.round(decimal * denominator);
+      if (numerator === 0) return "";
+      if (numerator === denominator) return "1";
+
+      return `${numerator}/${denominator}`;
+    }
+  </script>
+</body>
+</html>
